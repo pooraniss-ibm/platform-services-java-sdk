@@ -33,23 +33,43 @@ import com.ibm.cloud.platform_services.iam_identity.v1.model.AccountSettingsResp
 import com.ibm.cloud.platform_services.iam_identity.v1.model.ApiKey;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.ApiKeyList;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.CreateApiKeyOptions;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.CreateClaimRuleOptions;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.CreateLinkOptions;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.CreateProfileOptions;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.CreateServiceIdOptions;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.DeleteApiKeyOptions;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.DeleteClaimRuleOptions;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.DeleteLinkOptions;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.DeleteProfileOptions;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.DeleteServiceIdOptions;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.GetAccountSettingsOptions;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.GetApiKeyOptions;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.GetApiKeysDetailsOptions;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.GetClaimRuleOptions;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.GetLinkOptions;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.GetProfileOptions;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.GetServiceIdOptions;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.ListApiKeysOptions;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.ListClaimRulesOptions;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.ListLinkOptions;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.ListProfileOptions;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.ListServiceIdsOptions;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.LockApiKeyOptions;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.LockServiceIdOptions;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.ProfileClaimRule;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.ProfileClaimRuleList;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.ProfileLink;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.ProfileLinkList;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.ServiceId;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.ServiceIdList;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.TrustedProfile;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.TrustedProfilesList;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.UnlockApiKeyOptions;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.UnlockServiceIdOptions;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.UpdateAccountSettingsOptions;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.UpdateApiKeyOptions;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.UpdateClaimRuleOptions;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.UpdateProfileOptions;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.UpdateServiceIdOptions;
 import com.ibm.cloud.platform_services.test.SdkIntegrationTestBase;
 import com.ibm.cloud.sdk.core.http.Response;
@@ -68,6 +88,9 @@ public class IamIdentityIT extends SdkIntegrationTestBase {
 
     private static String APIKEY_NAME = "Java-SDK-IT-ApiKey";
     private static String SERVICEID_NAME = "Java-SDK-IT-ServiceId";
+    private static String PROFILE_NAME_1= "Java-SDK-Profile1";
+    private static String PROFILE_NAME_2= "Java-SDK-Profile2";
+    private static String CLAIM_RULE_NAME= "Java-SDK-ClaimRule";
 
     private static String ACCOUNT_ID;
     private static String IAM_ID;
@@ -83,6 +106,10 @@ public class IamIdentityIT extends SdkIntegrationTestBase {
 
     private String serviceId1;
     private String serviceIdEtag1;
+
+    private String profileId1;
+    private String profileId2;
+    private String claimRuleId;
 
     private String accountSettingsEtag;
 
@@ -664,6 +691,88 @@ public class IamIdentityIT extends SdkIntegrationTestBase {
             log(String.format("Service returned status code %s: %s\nError details: %s",
                     e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
             assertEquals(e.getStatusCode(), 404);
+        }
+    }
+
+    @Test
+    public void testCreateProfile1() throws Exception{
+        try{
+            CreateProfileOptions createProfileOptions = new CreateProfileOptions.Builder()
+                    .name(PROFILE_NAME_1)
+                    .description("JavaSDK test Profile #1")
+                    .account_id(ACCOUNT_ID)
+                    .build();
+            Response<TrustedProfile> response = service.createProfile(CreateProfileOptions).execute();
+            assertNotNull(response);
+            assertEquals(response.getStatusCode(), 201);
+
+            TrustedProfile trustedProfileResult = response.getResult();
+            assertNotNull(profileRtrustedProfileResultesult);
+            log(String.format(">>> createProfile #1 response:\n%s", trustedProfileResult.toString()));
+
+            // Save the id for use by other test methods.
+            profileId1 = trustedProfileResult.getId();
+            assertNotNull(profileId1);
+        }catch (ServiceResponseException e) {
+            fail(String.format("Service returned status code %d: %s\nError details: %s",
+                    e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+        }
+    }
+
+    @Test
+    public void testCreateProfile2() throws Exception{
+        try{
+            CreateProfileOptions createProfileOptions = new CreateProfileOptions.Builder()
+                    .name(PROFILE_NAME_2)
+                    .description("JavaSDK test Profile #2")
+                    .account_id(ACCOUNT_ID)
+                    .build();
+            Response<TrustedProfile> response = service.createProfile(CreateProfileOptions).execute();
+            assertNotNull(response);
+            assertEquals(response.getStatusCode(), 201);
+
+            TrustedProfile trustedProfileResult = response.getResult();
+            assertNotNull(trustedProfileResult);
+            log(String.format(">>> createProfile #2 response:\n%s", trustedProfileResult.toString()));
+
+        }catch (ServiceResponseException e) {
+            fail(String.format("Service returned status code %d: %s\nError details: %s",
+                    e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+        }
+    }
+
+    @Test(dependsOnMethods = { "testCreateProfile1" })
+    public void testGetProfile() throws Exception {
+        assertNotNull(profileId1);
+        try {
+            GetProfileOptions getProfileOptions = new GetProfileOptions.Builder()
+                    .id(profileId1)
+                    .includeHistory(true)
+                    .build();
+
+            Response<TrustedProfile> response = service.getProfile(getApiKeyOptions).execute();
+            assertNotNull(response);
+            assertEquals(response.getStatusCode(), 200);
+
+            TrustedProfile trustedProfileResult = response.getResult();
+            assertNotNull(trustedProfileResult);
+            log(String.format("\n>>> getProfile response:\n%s", trustedProfileResult.toString()));
+
+            assertEquals(trustedProfileResult.getId(), profileId1);
+            assertEquals(trustedProfileResult.getName(), APIKEY_NAME);
+            assertEquals(trustedProfileResult.getIamId(), IAM_ID);
+            assertEquals(trustedProfileResult.getAccountId(), ACCOUNT_ID);
+            assertEquals(trustedProfileResult.getCreatedBy(), IAM_ID);
+            assertNotNull(trustedProfileResult.getCrn());
+
+            // Grab the Etag value from the response for use in the update operation.
+            assertNotNull(response.getHeaders().values("Etag"));
+            assertEquals(response.getHeaders().values("Etag").size(), 1);
+            profileEtag1 = response.getHeaders().values("Etag").get(0);
+            assertNotNull(profileEtag1);
+        } catch (ServiceResponseException e) {
+            fail(String.format("Service returned status code %d: %s\nError details: %s",
+                    e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
         }
     }
 
