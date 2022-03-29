@@ -113,6 +113,7 @@ public class IamIdentityExamples {
     private static String claimRuleEtag;
     private static String linkId;
     private static String accountSettingsEtag;
+    private static String reportReferenceValue;
 
     static {
         System.setProperty("IBM_CREDENTIALS_FILE", "../../iam_identity.env");
@@ -204,6 +205,7 @@ public class IamIdentityExamples {
             GetApiKeyOptions getApiKeyOptions = new GetApiKeyOptions.Builder()
                     .id(apikeyId)
                     .includeHistory(true)
+                    .includeActivity(true)
                     .build();
 
             Response<ApiKey> response = service.getApiKey(getApiKeyOptions).execute();
@@ -827,6 +829,51 @@ public class IamIdentityExamples {
             System.out.println(accountSettingsResponse);
 
             // end-updateAccountSettings
+
+        } catch (ServiceResponseException e) {
+            logger.error(String.format("Service returned status code %s: %s\nError details: %s",
+                    e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
+        }
+
+        try {
+            System.out.println("createReport() result:");
+
+            // begin-createReport
+
+            CreateReportOptions createReportOptions = new CreateReportOptions.Builder()
+                    .accountId(accountId)
+                    .build();
+
+            Response<ReportReference> response = service.createReport(createReportOptions).execute();
+            ReportReference reportReference = response.getResult();
+
+            reportReferenceValue = reportReference.getReference();
+
+            System.out.println(reportReferenceValue);
+
+            // end-createReport
+
+        } catch (ServiceResponseException e) {
+            logger.error(String.format("Service returned status code %s: %s\nError details: %s",
+                    e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
+        }
+
+        try {
+            System.out.println("getReport() result:");
+
+            // begin-getReport
+
+            GetReportOptions getReportOptions = new GetReportOptions.Builder()
+                    .accountId(accountId)
+                    .reference(reportReferenceValue)
+                    .build();
+
+            Response<Report> response = service.getReport(getReportOptions).execute();
+            Report fetchedReport = response.getResult();
+
+            System.out.println(fetchedReport);
+
+            // end-getReport
 
         } catch (ServiceResponseException e) {
             logger.error(String.format("Service returned status code %s: %s\nError details: %s",

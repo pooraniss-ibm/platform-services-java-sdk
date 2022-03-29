@@ -13,44 +13,37 @@
 
 package com.ibm.cloud.platform_services.iam_identity.v1.model;
 
-import com.ibm.cloud.platform_services.iam_identity.v1.model.Activity;
-import com.ibm.cloud.platform_services.iam_identity.v1.model.ApiKey;
-import com.ibm.cloud.platform_services.iam_identity.v1.model.EnityHistoryRecord;
-import com.ibm.cloud.platform_services.iam_identity.v1.model.ResponseContext;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.CreateReportOptions;
 import com.ibm.cloud.platform_services.iam_identity.v1.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the ApiKey model.
+ * Unit test class for the CreateReportOptions model.
  */
-public class ApiKeyTest {
+public class CreateReportOptionsTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testApiKey() throws Throwable {
-    ApiKey apiKeyModel = new ApiKey();
-    assertNull(apiKeyModel.getContext());
-    assertNull(apiKeyModel.getId());
-    assertNull(apiKeyModel.getEntityTag());
-    assertNull(apiKeyModel.getCrn());
-    assertNull(apiKeyModel.isLocked());
-    assertNull(apiKeyModel.getCreatedAt());
-    assertNull(apiKeyModel.getCreatedBy());
-    assertNull(apiKeyModel.getModifiedAt());
-    assertNull(apiKeyModel.getName());
-    assertNull(apiKeyModel.getDescription());
-    assertNull(apiKeyModel.getIamId());
-    assertNull(apiKeyModel.getAccountId());
-    assertNull(apiKeyModel.getApikey());
-    assertNull(apiKeyModel.getHistory());
-    assertNull(apiKeyModel.getActivity());
+  public void testCreateReportOptions() throws Throwable {
+    CreateReportOptions createReportOptionsModel = new CreateReportOptions.Builder()
+      .accountId("testString")
+      .type("inactive")
+      .duration("720")
+      .build();
+    assertEquals(createReportOptionsModel.accountId(), "testString");
+    assertEquals(createReportOptionsModel.type(), "inactive");
+    assertEquals(createReportOptionsModel.duration(), "720");
   }
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testCreateReportOptionsError() throws Throwable {
+    new CreateReportOptions.Builder().build();
+  }
+
 }

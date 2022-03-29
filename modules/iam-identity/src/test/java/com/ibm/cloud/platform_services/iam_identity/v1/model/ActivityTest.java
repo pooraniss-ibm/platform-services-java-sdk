@@ -14,43 +14,25 @@
 package com.ibm.cloud.platform_services.iam_identity.v1.model;
 
 import com.ibm.cloud.platform_services.iam_identity.v1.model.Activity;
-import com.ibm.cloud.platform_services.iam_identity.v1.model.ApiKey;
-import com.ibm.cloud.platform_services.iam_identity.v1.model.EnityHistoryRecord;
-import com.ibm.cloud.platform_services.iam_identity.v1.model.ResponseContext;
 import com.ibm.cloud.platform_services.iam_identity.v1.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the ApiKey model.
+ * Unit test class for the Activity model.
  */
-public class ApiKeyTest {
+public class ActivityTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testApiKey() throws Throwable {
-    ApiKey apiKeyModel = new ApiKey();
-    assertNull(apiKeyModel.getContext());
-    assertNull(apiKeyModel.getId());
-    assertNull(apiKeyModel.getEntityTag());
-    assertNull(apiKeyModel.getCrn());
-    assertNull(apiKeyModel.isLocked());
-    assertNull(apiKeyModel.getCreatedAt());
-    assertNull(apiKeyModel.getCreatedBy());
-    assertNull(apiKeyModel.getModifiedAt());
-    assertNull(apiKeyModel.getName());
-    assertNull(apiKeyModel.getDescription());
-    assertNull(apiKeyModel.getIamId());
-    assertNull(apiKeyModel.getAccountId());
-    assertNull(apiKeyModel.getApikey());
-    assertNull(apiKeyModel.getHistory());
-    assertNull(apiKeyModel.getActivity());
+  public void testActivity() throws Throwable {
+    Activity activityModel = new Activity();
+    assertNull(activityModel.getLastAuthn());
+    assertNull(activityModel.getAuthnCount());
   }
 }
