@@ -1,3 +1,10 @@
+# [0.75.0](https://github.com/IBM/platform-services-java-sdk/compare/0.74.0...0.75.0) (2026-04-07)
+
+
+### Features
+
+* **IAM Identity:** add support for limits/cross account ([#300](https://github.com/IBM/platform-services-java-sdk/issues/300)) ([9b813cd](https://github.com/IBM/platform-services-java-sdk/commit/9b813cd75e16c578c5c31f55f7ddda82cc893b05))
+
 # [0.74.0](https://github.com/IBM/platform-services-java-sdk/compare/0.73.2...0.74.0) (2026-02-27)
 
 
